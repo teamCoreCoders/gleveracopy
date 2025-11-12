@@ -97,42 +97,19 @@ export default function BestSellersSection() {
 }
 
 function BestSellerCard({ card, index }: { card: Card; index: number }) {
-    const imageVariants = {
-        hidden: { opacity: 0, scale: 0.8, y: 30 },
-        visible: {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            transition: {
-                duration: 0.6,
-                ease: [0.25, 0.1, 0.25, 1],
-                delay: index * 0.15,
-            },
-        },
-    };
-
-    const textVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                duration: 0.6,
-                ease: [0.25, 0.1, 0.25, 1],
-                delay: index * 0.15 + 0.3,
-            },
-        },
-    };
-
     return (
         <article className="group w-full flex flex-col items-center text-center">
             {/* Square media box with overflow clip */}
             <motion.div
                 className="relative w-full md:w-[295px] aspect-[1/1] overflow-hidden rounded-none"
-                variants={imageVariants}
-                initial="hidden"
-                whileInView="visible"
+                initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ margin: "-50px" }}
+                transition={{
+                    duration: 0.6,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: index * 0.15,
+                }}
             >
                 {/* Base image */}
                 <Image
@@ -155,10 +132,14 @@ function BestSellerCard({ card, index }: { card: Card; index: number }) {
 
             <motion.div
                 className="mt-6 text-[18px] md:text-[17px] leading-[1.35] text-[#EDEDED]"
-                variants={textVariants}
-                initial="hidden"
-                whileInView="visible"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ margin: "-50px" }}
+                transition={{
+                    duration: 0.6,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: index * 0.15 + 0.3,
+                }}
             >
                 <p>{card.titleLine1}</p>
                 {card.titleLine2 && <p className="mt-1">{card.titleLine2}</p>}
