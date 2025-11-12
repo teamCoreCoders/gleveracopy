@@ -127,28 +127,18 @@ function LuxuryCard({ item, index }: { item: Item; index: number }) {
     // Alternate layout: first two items get larger images, last two get text-focused
     const isLargeImage = index < 2;
 
-    const cardVariants = {
-        hidden: { opacity: 0, y: 50, scale: 0.95 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            transition: {
-                duration: 0.8,
-                ease: [0.25, 0.1, 0.25, 1],
-                delay: index * 0.15,
-            },
-        },
-    };
-
     if (isLargeImage) {
         return (
             <motion.div
                 className="group relative overflow-hidden"
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ margin: "-50px" }}
+                transition={{
+                    duration: 0.8,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: index * 0.15,
+                }}
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={handleMouseLeave}
@@ -249,10 +239,14 @@ function LuxuryCard({ item, index }: { item: Item; index: number }) {
     return (
         <motion.div
             className="group relative flex flex-col justify-center p-6 sm:p-8 lg:p-12 min-h-[300px] sm:min-h-[380px]"
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ margin: "-50px" }}
+            transition={{
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: index * 0.15,
+            }}
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={handleMouseLeave}
