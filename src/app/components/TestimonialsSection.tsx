@@ -93,27 +93,17 @@ export default function TestimonialsSection() {
 }
 
 function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
-    const cardVariants = {
-        hidden: { opacity: 0, y: 50, scale: 0.95 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            transition: {
-                duration: 0.8,
-                ease: [0.25, 0.1, 0.25, 1],
-                delay: index * 0.15,
-            },
-        },
-    };
-
     return (
         <motion.article
             className="bg-white/5 backdrop-blur-sm border border-white/10 p-6 sm:p-8 lg:p-10 rounded-none group hover:bg-white/10 hover:border-white/20 transition-all duration-500"
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ margin: "-50px" }}
+            transition={{
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: index * 0.15,
+            }}
         >
             {/* Rating Stars */}
             <div className="flex gap-1 mb-6">
