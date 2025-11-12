@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 type Card = {
     titleLine1: string;
@@ -48,12 +51,16 @@ export default function BestSellersSection() {
     return (
         <main className=" md:h- h-auto bg-black text-white">
             <section className="mx-auto max-w-[1700px] px-4 sm:px-6 lg:px-10 py-12 sm:py-16 lg:py-20">
-                <h1
+                <motion.h1
                     className="select-none text-center md:text-left text-[42px] sm:text-[56px] lg:text-[84px] leading-none tracking-[-0.02em] font-[500]"
                     style={{ fontFamily: "Bodoni Moda, serif" }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ margin: "-100px" }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                 >
                     Best Sellers
-                </h1>
+                </motion.h1>
 
                 {/* Mobile: horizontal scroll; Desktop: grid */}
                 <div className="mt-10 sm:mt-14 lg:mt-16">
@@ -65,7 +72,7 @@ export default function BestSellersSection() {
                         >
                             {CARDS.map((card, idx) => (
                                 <div key={idx} className="snap-start shrink-0 w-[70vw] xs:w-[62vw] sm:w-[50vw]">
-                                    <BestSellerCard card={card} />
+                                    <BestSellerCard card={card} index={idx} />
                                 </div>
                             ))}
                         </div>
@@ -74,7 +81,7 @@ export default function BestSellersSection() {
                     {/* Desktop grid */}
                     <div className="hidden sm:grid grid-cols-2 xl:grid-cols-4 gap-y-14 sm:gap-y-16 gap-x-10 xl:gap-x-12">
                         {CARDS.map((card, idx) => (
-                            <BestSellerCard key={idx} card={card} />
+                            <BestSellerCard key={idx} card={card} index={idx} />
                         ))}
                     </div>
                 </div>
@@ -89,11 +96,44 @@ export default function BestSellersSection() {
     );
 }
 
-function BestSellerCard({ card }: { card: Card }) {
+function BestSellerCard({ card, index }: { card: Card; index: number }) {
+    const imageVariants = {
+        hidden: { opacity: 0, scale: 0.8, y: 30 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: index * 0.15,
+            },
+        },
+    };
+
+    const textVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: index * 0.15 + 0.3,
+            },
+        },
+    };
+
     return (
         <article className="group w-full flex flex-col items-center text-center">
             {/* Square media box with overflow clip */}
-            <div className="relative w-full md:w-[295px] aspect-[1/1] overflow-hidden rounded-none">
+            <motion.div
+                className="relative w-full md:w-[295px] aspect-[1/1] overflow-hidden rounded-none"
+                variants={imageVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ margin: "-50px" }}
+            >
                 {/* Base image */}
                 <Image
                     src={card.img}
@@ -111,12 +151,18 @@ function BestSellerCard({ card }: { card: Card }) {
                     className="object-cover object-center transition-opacity duration-300 ease-out opacity-0 group-hover:opacity-100"
                     sizes="(max-width: 640px) 70vw, (max-width: 1024px) 33vw, 295px"
                 />
-            </div>
+            </motion.div>
 
-            <div className="mt-6 text-[18px] md:text-[17px] leading-[1.35] text-[#EDEDED]">
+            <motion.div
+                className="mt-6 text-[18px] md:text-[17px] leading-[1.35] text-[#EDEDED]"
+                variants={textVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ margin: "-50px" }}
+            >
                 <p>{card.titleLine1}</p>
                 {card.titleLine2 && <p className="mt-1">{card.titleLine2}</p>}
-            </div>
+            </motion.div>
         </article>
     );
 }

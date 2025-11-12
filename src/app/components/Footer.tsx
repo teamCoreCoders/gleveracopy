@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Footer() {
   return (
@@ -19,6 +20,7 @@ export default function Footer() {
               { label: 'Contact', href: '/contact' },
               { label: 'Locations', href: '/locations' },
             ]}
+            index={0}
           />
 
           {/* Column 2 */}
@@ -32,10 +34,17 @@ export default function Footer() {
               { label: 'Privacy Policy', href: '/privacy-policy' },
               { label: 'Accessibility', href: '/accessibility' },
             ]}
+            index={1}
           />
 
           {/* Column 3: Contact */}
-          <div className="col-span-2 md:col-span-1">
+          <motion.div
+            className="col-span-2 md:col-span-1"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-50px" }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 }}
+          >
             <h3 className="text-sm uppercase tracking-widest text-white/60 mb-3">
               Contact
             </h3>
@@ -60,10 +69,15 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Column 4: Socials */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-50px" }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+          >
             <h3 className="text-sm uppercase tracking-widest text-white/60 mb-3">
               Follow Us
             </h3>
@@ -73,22 +87,46 @@ export default function Footer() {
               <Social href="https://facebook.com">Facebook</Social>
               <Social href="https://pinterest.com">Pinterest</Social>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* ===== Brand Section ===== */}
-      <div className="flex flex-col items-center justify-center py-10 border-b border-white/10 text-center">
-        <span className="tracking-[0.35em] text-[36px] md:text-[64px] font-semibold text-white/90">
+      <motion.div
+        className="flex flex-col items-center justify-center py-10 border-b border-white/10 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ margin: "-50px" }}
+        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        <motion.span
+          className="tracking-[0.35em] text-[36px] md:text-[64px] font-semibold text-white/90"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ margin: "-50px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           GLEVERA
-        </span>
-        <p className="text-xs mt-3 text-white/50">
+        </motion.span>
+        <motion.p
+          className="text-xs mt-3 text-white/50"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-50px" }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           Luxury crafted for timeless elegance.
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       {/* ===== Bottom Section ===== */}
-      <div className="mx-auto max-w-[1300px] px-6 lg:px-10 py-6 text-xs flex flex-col md:flex-row items-center justify-between text-white/50 gap-4">
+      <motion.div
+        className="mx-auto max-w-[1300px] px-6 lg:px-10 py-6 text-xs flex flex-col md:flex-row items-center justify-between text-white/50 gap-4"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ margin: "-50px" }}
+        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      >
         <p>© 2035 GLEVERA. All rights reserved.</p>
         <p>
           Built on{' '}
@@ -101,7 +139,7 @@ export default function Footer() {
             Wix Studio
           </a>
         </p>
-      </div>
+      </motion.div>
     </footer>
   );
 }
@@ -109,12 +147,19 @@ export default function Footer() {
 function FooterColumn({
   title,
   links,
+  index,
 }: {
   title: string;
   links: { label: string; href: string }[];
+  index: number;
 }) {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ margin: "-50px" }}
+      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: index * 0.1 }}
+    >
       <h3 className="text-sm uppercase tracking-widest text-white/60 mb-3">
         {title}
       </h3>
@@ -130,7 +175,7 @@ function FooterColumn({
           </li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   );
 }
 

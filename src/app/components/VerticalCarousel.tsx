@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 type Item = {
     key: string;
@@ -47,141 +48,284 @@ const ITEMS: Item[] = [
     },
 ];
 
-const AUTOPLAY_MS = 2800;
-
 export default function VerticalCarousel() {
-    const [index, setIndex] = useState(0);
-    const wrap = (i: number) => (i + ITEMS.length) % ITEMS.length;
-
-    // Autoplay
-    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-    const start = () => {
-        stop();
-        timerRef.current = setInterval(() => {
-            setIndex((i) => (i + 1) % ITEMS.length);
-        }, AUTOPLAY_MS);
-    };
-    const stop = () => {
-        if (timerRef.current) clearInterval(timerRef.current);
-        timerRef.current = null;
-    };
-    useEffect(() => {
-        start();
-        return stop;
-    }, []);
-
-    const vis = useMemo(() => {
-        const prev = wrap(index - 1);
-        const curr = wrap(index);
-        const next = wrap(index + 1);
-        return [prev, curr, next];
-    }, [index]);
-
-    const active = ITEMS[index];
-
     return (
-        <section className="bg-black text-white ">
-            <div className="mx-auto max-w-[1450px] px-4 sm:px-8 py-8 sm:py-12">
-                {/* Force 12-col grid on all breakpoints */}
-                <div className="grid grid-cols-12 gap-6 sm:gap-8">
-                    {/* Left column: keep span consistent across sizes */}
-                    <aside className="col-span-5 ">
-                        <div className="relative h-[64vh] sm:h-[66vh] lg:h-[70vh] min-h-[360px]">
-                            <div className="absolute inset-0 grid place-items-center">
-                                <div className="w-full max-w-[540px] text-center sm:mt-0 md:mt-0 lg:mt-50 ">
-                                    <h2
-                                        className="select-none font-[500] leading-[0.95] tracking-[-0.02em] fraunces-text "
-                                        style={{ fontSize: "clamp(2rem, 6.2vw, 5rem)" }}
-                                    >
-                                        {active.title}
-                                    </h2>
-                                    {active.subtitle && (
-                                        <p className="mt-3 text-white/70 text-[15px] sm:text-[17px]">
-                                            {active.subtitle}
-                                        </p>
-                                    )}
-                                    {active.desc && (
-                                        <p className="mt-4 text-white/60 text-[13px] sm:text-[15px] leading-relaxed max-w-[580px]">
-                                            {active.desc}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </aside>
+        <section className="bg-black text-white relative overflow-hidden">
+            <div className="mx-auto max-w-[1800px] px-4 sm:px-6 lg:px-10 py-12 sm:py-16 lg:py-20">
+                {/* Section Header */}
+                <motion.div
+                    className="mb-10 sm:mb-12 lg:mb-16"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ margin: "-100px" }}
+                    transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                    <motion.h2
+                        className="text-center text-[40px] sm:text-[56px] lg:text-[80px] font-[500] leading-[0.95] tracking-[-0.02em]"
+                        style={{ fontFamily: "Bodoni Moda, serif" }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ margin: "-100px" }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                    >
+                        Our Collections
+                    </motion.h2>
+                    <motion.p
+                        className="text-center mt-4 text-white/60 text-sm sm:text-base max-w-2xl mx-auto"
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ margin: "-100px" }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                    >
+                        Discover timeless elegance in every piece
+                    </motion.p>
+                </motion.div>
 
-                    {/* Right column */}
-                    <div className="col-span-7">
-                        <Carousel3Up
-                            items={ITEMS}
-                            vis={vis}
-                            onPause={stop}
-                            onResume={start}
-                        />
-
-                        <div className="mt-5 sm:mt-6 flex items-center justify-center gap-3">
-                            {ITEMS.map((_, i) => (
-                                <button
-                                    key={i}
-                                    aria-label={`Go to ${i + 1}`}
-                                    onClick={() => setIndex(i)}
-                                    className={`h-[6px] rounded-full transition-all ${i === index ? "w-8 bg-white" : "w-3 bg-white/40 hover:bg-white/70"
-                                        }`}
-                                />
-                            ))}
-                        </div>
-                    </div>
+                {/* Luxury Grid Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
+                    {ITEMS.map((item, index) => (
+                        <LuxuryCard key={item.key} item={item} index={index} />
+                    ))}
                 </div>
             </div>
+
+            {/* Decorative Elements */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         </section>
     );
 }
 
-function Carousel3Up({
-    items,
-    vis,
-    onPause,
-    onResume,
-}: {
-    items: Item[];
-    vis: number[];
-    onPause: () => void;
-    onResume: () => void;
-}) {
+function LuxuryCard({ item, index }: { item: Item; index: number }) {
+    const [isHovered, setIsHovered] = useState(false);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), {
+        stiffness: 300,
+        damping: 30,
+    });
+    const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), {
+        stiffness: 300,
+        damping: 30,
+    });
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        mouseX.set(x - 0.5);
+        mouseY.set(y - 0.5);
+    };
+
+    const handleMouseLeave = () => {
+        mouseX.set(0);
+        mouseY.set(0);
+        setIsHovered(false);
+    };
+
+    // Alternate layout: first two items get larger images, last two get text-focused
+    const isLargeImage = index < 2;
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 50, scale: 0.95 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                duration: 0.8,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: index * 0.15,
+            },
+        },
+    };
+
+    if (isLargeImage) {
+        return (
+            <motion.div
+                className="group relative overflow-hidden"
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ margin: "-50px" }}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={handleMouseLeave}
+            >
+                {/* Image Container with 3D Effect */}
+                <motion.div
+                    className="relative aspect-[3/4] overflow-hidden bg-black/20"
+                    style={{
+                        rotateX,
+                        rotateY,
+                        transformStyle: "preserve-3d",
+                    }}
+                >
+                    <motion.div
+                        className="absolute inset-0"
+                        animate={{
+                            scale: isHovered ? 1.05 : 1,
+                        }}
+                        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                    >
+                        <Image
+                            src={item.image}
+                            alt={item.alt}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            priority={index === 0}
+                        />
+                    </motion.div>
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+
+                    {/* Content Overlay */}
+                    <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 lg:p-8">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{
+                                opacity: isHovered ? 1 : 0.9,
+                                y: isHovered ? 0 : 10,
+                            }}
+                            transition={{ duration: 0.4 }}
+                        >
+                            <motion.h3
+                                className="text-[36px] sm:text-[48px] lg:text-[64px] font-[500] leading-[0.95] tracking-[-0.02em] mb-2"
+                                style={{ fontFamily: "Bodoni Moda, serif" }}
+                            >
+                                {item.title}
+                            </motion.h3>
+                            {item.subtitle && (
+                                <motion.p
+                                    className="text-white/80 text-sm sm:text-base uppercase tracking-widest mb-3"
+                                    animate={{
+                                        opacity: isHovered ? 1 : 0.7,
+                                    }}
+                                >
+                                    {item.subtitle}
+                                </motion.p>
+                            )}
+                            <motion.p
+                                className="text-white/70 text-sm sm:text-base leading-relaxed max-w-md"
+                                animate={{
+                                    opacity: isHovered ? 1 : 0,
+                                    height: isHovered ? "auto" : 0,
+                                }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                {item.desc}
+                            </motion.p>
+                        </motion.div>
+                    </div>
+
+                    {/* Shine Effect */}
+                    <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                        animate={{
+                            x: isHovered ? ["-100%", "200%"] : "-100%",
+                        }}
+                        transition={{
+                            duration: 1.5,
+                            ease: "easeInOut",
+                            repeat: isHovered ? Infinity : 0,
+                            repeatDelay: 2,
+                        }}
+                        style={{
+                            transform: "skewX(-20deg)",
+                        }}
+                    />
+                </motion.div>
+
+                {/* Border Glow */}
+                <div className="absolute inset-0 border border-white/10 group-hover:border-white/30 transition-colors duration-500 pointer-events-none" />
+            </motion.div>
+        );
+    }
+
+    // Text-focused card for last two items
     return (
-        <div
-            className=" relative mx-auto w-full max-w-[680px] h-[64vh] sm:h-[66vh] lg:h-[100vh] min-h-[340px] overflow-hidden"
+        <motion.div
+            className="group relative flex flex-col justify-center p-6 sm:p-8 lg:p-12 min-h-[300px] sm:min-h-[380px]"
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ margin: "-50px" }}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={handleMouseLeave}
         >
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <CarouselImage item={items[vis[0]]} size="small" />
-                <CarouselImage item={items[vis[1]]} size="large" />
-                <CarouselImage item={items[vis[2]]} size="small" />
+            {/* Background Image (Subtle) */}
+            <motion.div
+                className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-700"
+                style={{
+                    rotateX,
+                    rotateY,
+                    transformStyle: "preserve-3d",
+                }}
+            >
+                <Image
+                    src={item.image}
+                    alt={item.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-black/60" />
+            </motion.div>
+
+            {/* Content */}
+            <div className="relative z-10">
+                <motion.div
+                    animate={{
+                        y: isHovered ? -10 : 0,
+                    }}
+                    transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                    <motion.h3
+                        className="text-[40px] sm:text-[56px] lg:text-[72px] font-[500] leading-[0.95] tracking-[-0.02em] mb-4"
+                        style={{ fontFamily: "Bodoni Moda, serif" }}
+                        animate={{
+                            scale: isHovered ? 1.02 : 1,
+                        }}
+                    >
+                        {item.title}
+                    </motion.h3>
+                    {item.subtitle && (
+                        <motion.p
+                            className="text-white/60 text-sm sm:text-base uppercase tracking-[0.2em] mb-6"
+                            animate={{
+                                opacity: isHovered ? 1 : 0.7,
+                            }}
+                        >
+                            {item.subtitle}
+                        </motion.p>
+                    )}
+                    <motion.p
+                        className="text-white/70 text-base sm:text-lg leading-relaxed max-w-lg"
+                        animate={{
+                            opacity: isHovered ? 1 : 0.8,
+                        }}
+                    >
+                        {item.desc}
+                    </motion.p>
+
+                    {/* Decorative Line */}
+                    <motion.div
+                        className="mt-8 h-px bg-white/20"
+                        animate={{
+                            scaleX: isHovered ? 1 : 0.5,
+                            opacity: isHovered ? 1 : 0.5,
+                        }}
+                        transition={{ duration: 0.6 }}
+                    />
+                </motion.div>
             </div>
 
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-14 sm:h-16 bg-gradient-to-b from-black to-transparent" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 sm:h-16 bg-gradient-to-t from-black to-transparent" />
-        </div>
-    );
-}
-
-function CarouselImage({ item, size }: { item: Item; size: "small" | "large" }) {
-    // Keep same proportions on mobile as desktop feel
-    const boxH = size === "large" ? "56%" : "22%";
-    const scale = size === "large" ? "scale-100" : "scale-95";
-
-    return (
-        <div
-            className={` relative w-[86%] sm:w-[78%] my-2 sm:my-3 transition-transform duration-500 ${scale}`}
-            style={{ height: boxH }}
-        >
-            <Image
-                src={item.image}
-                alt={item.alt}
-                fill
-                className="object-contain object-center"
-                sizes="(max-width: 640px) 86vw, 42vw"
-                priority={false}
-            />
-        </div>
+            {/* Border */}
+            <div className="absolute inset-0 border border-white/10 group-hover:border-white/20 transition-colors duration-500 pointer-events-none" />
+        </motion.div>
     );
 }

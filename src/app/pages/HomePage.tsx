@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Inter } from "next/font/google";
 
 import Header from "../components/Header";
@@ -11,6 +10,7 @@ import HeroSection from "../sections/HomePageSections/HeroSection";
 import BestSellersSection from "../sections/HomePageSections/BestSellersSection";
 import ThreeFeatureCards from "../components/ThreeFeatureCards";
 import VerticalCarousel from "../components/VerticalCarousel";
+import TestimonialsSection from "../components/TestimonialsSection";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400"] });
 
@@ -32,54 +32,34 @@ export default function HomePage() {
       />
 
       {/* ===== Hero Section ===== */}
-      <motion.section
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="relative z-10 bg-transparent"
-      >
+      <section className="relative z-10 bg-transparent">
         <HeroSection />
-      </motion.section>
+      </section>
 
       {/* ===== Best Sellers ===== */}
-      <motion.section
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="px-6 md:px-12 lg:px-24 py-20 bg-transparent"
-      >
+      <section className="px-6 md:px-12 lg:px-24 py-20 bg-transparent">
         <BestSellersSection />
-      </motion.section>
+      </section>
 
       {/* ===== Vertical Carousel ===== */}
-      <motion.section
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1, ease: "easeOut" }}
-        className="py-24 bg-transparent"
-      >
+      <section className="py-24 bg-transparent">
         <VerticalCarousel />
-      </motion.section>
+      </section>
 
       {/* ===== Three Feature Cards ===== */}
-      <motion.section
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.1 }}
-        className="py-20 px-6 md:px-12 lg:px-24 border-t border-neutral-800 bg-transparent"
-      >
+      <section className="py-20 px-6 md:px-12 lg:px-24 border-t border-neutral-800 bg-transparent">
         <ThreeFeatureCards />
-      </motion.section>
+      </section>
+
+      {/* ===== Testimonials ===== */}
+      <section className="bg-black text-white">
+        <TestimonialsSection />
+      </section>
 
       {/* ===== Footer ===== */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1.2 }}
-        className="bg-black text-white"
-      >
+      <footer className="bg-black text-white">
         <Footer />
-      </motion.footer>
+      </footer>
     </main>
   );
 }
