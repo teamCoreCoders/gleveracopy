@@ -1,0 +1,202 @@
+/* ------------------------------------ */
+/* 📦 FONT IMPORTS */
+/* ------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,700;1,6..96,700&family=Devonshire&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,900;1,100;1,900&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap');
+
+/* ------------------------------------ */
+/* 🖋️ FONT CLASSES */
+/* ------------------------------------ */
+.bodoni-moda-bm {
+  font-family: "Bodoni Moda", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 0.02em;
+}
+
+.fraunces-text {
+  font-family: "Fraunces", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "SOFT" 0, "WONK" 0;
+}
+
+.wix-madefor-text {
+  font-family: "Wix Madefor Text", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.02em;
+}
+
+/* ------------------------------------ */
+/* 🎞️ GLOBAL ANIMATIONS */
+/* ------------------------------------ */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes subtle-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Utility animation classes */
+.animate-fade-up {
+  animation: fade-up 1s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in 1.2s ease-in-out forwards;
+}
+
+.animate-float {
+  animation: subtle-float 3s ease-in-out infinite;
+}
+
+/* ------------------------------------ */
+/* 🧊 CARD + BUTTON HOVERS */
+/* ------------------------------------ */
+.card-hover {
+  transition: all 0.4s ease;
+  transform: translateY(0);
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  filter: brightness(1.05);
+}
+
+.btn-smooth {
+  transition: all 0.3s ease;
+}
+
+.btn-smooth:hover {
+  transform: scale(1.03);
+  background-color: #111;
+  color: #fff;
+}
+
+/* ------------------------------------ */
+/* 🌀 IMPROVED MARQUEE */
+/* ------------------------------------ */
+.marquee-track {
+  display: flex;
+  gap: var(--gap, 2rem);
+  padding-inline: var(--gap, 2rem);
+  overflow: hidden;
+  white-space: nowrap;
+  align-items: center;
+  will-change: transform;
+  user-select: none;
+}
+
+.marquee-lane {
+  display: flex;
+  gap: var(--gap, 2rem);
+  flex-shrink: 0;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  font-size: clamp(14px, 2.6vw, 26px);
+  line-height: 1.1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  opacity: 0.9;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.dir-left {
+  animation: marquee-left var(--speed, 18s) linear infinite;
+}
+
+.dir-right {
+  animation: marquee-right var(--speed, 18s) linear infinite;
+}
+
+.marquee-track:hover .marquee-lane,
+.marquee-track:focus-within .marquee-lane {
+  animation-play-state: paused;
+}
+
+/* smoother easing & parallax-like speed illusion */
+@keyframes marquee-left {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+/* ------------------------------------ */
+/* ✨ EXTRAS */
+/* ------------------------------------ */
+.glass-bg {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shadow-soft {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+img {
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+    filter 0.6s ease;
+}
+
+img:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+/* ------------------------------------ */
+/* ⚙️ REDUCED MOTION */
+/* ------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .dir-left,
+  .dir-right,
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-float {
+    animation: none;
+  }
+}
+
+/* ------------------------------------ */
+/* 🌀 TAILWIND */
+/* ------------------------------------ */
+@import "tailwindcss";
