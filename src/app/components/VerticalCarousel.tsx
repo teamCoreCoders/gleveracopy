@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 
 type Item = {
     key: string;
@@ -19,7 +19,7 @@ const ITEMS: Item[] = [
         title: "Rings",
         subtitle: "Modern cuts",
         desc: "Signature solitaire, halo, and eternity silhouettes crafted to shine from every angle.",
-        image: "/images/hover3.png",
+        image: "/images/ring-model.png",
         alt: "Rings",
     },
     {
@@ -27,7 +27,7 @@ const ITEMS: Item[] = [
         title: "Earrings",
         subtitle: "Everyday sparkle",
         desc: "From delicate studs to statement drops, elevate looks with effortless brilliance.",
-        image: "/images/hover2.png",
+        image: "/images/necklace-model.png",
         alt: "Earrings",
     },
     {
@@ -35,7 +35,7 @@ const ITEMS: Item[] = [
         title: "Necklaces",
         subtitle: "Layer with love",
         desc: "Chains and pendants designed for stacking and story‑telling moments.",
-        image: "/images/hover4.png",
+        image: "/images/bracelet-model.png",
         alt: "Necklaces",
     },
     {
@@ -43,7 +43,7 @@ const ITEMS: Item[] = [
         title: "Bracelets",
         subtitle: "Stack your shine",
         desc: "Tennis and cuff styles that bring a refined finish to every ensemble.",
-        image: "/images/hover1.png",
+        image: "/images/necklace-model.png",
         alt: "Bracelets",
     },
 ];
@@ -81,10 +81,10 @@ export default function VerticalCarousel() {
                     </motion.p>
                 </motion.div>
 
-                {/* Luxury Grid Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
+                {/* Items with Text and Image Side by Side */}
+                <div className="space-y-20 lg:space-y-28 xl:space-y-32">
                     {ITEMS.map((item, index) => (
-                        <LuxuryCard key={item.key} item={item} index={index} />
+                        <CollectionItem key={item.key} item={item} index={index} />
                     ))}
                 </div>
             </div>
@@ -96,230 +96,105 @@ export default function VerticalCarousel() {
     );
 }
 
-function LuxuryCard({ item, index }: { item: Item; index: number }) {
+function CollectionItem({ item, index }: { item: Item; index: number }) {
     const [isHovered, setIsHovered] = useState(false);
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
 
-    const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [7, -7]), {
-        stiffness: 300,
-        damping: 30,
-    });
-    const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-7, 7]), {
-        stiffness: 300,
-        damping: 30,
-    });
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-        mouseX.set(x - 0.5);
-        mouseY.set(y - 0.5);
-    };
-
-    const handleMouseLeave = () => {
-        mouseX.set(0);
-        mouseY.set(0);
-        setIsHovered(false);
-    };
-
-    // Alternate layout: first two items get larger images, last two get text-focused
-    const isLargeImage = index < 2;
-
-    if (isLargeImage) {
-        return (
-            <motion.div
-                className="group relative overflow-hidden"
-                initial={{ opacity: 0, y: 50, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ margin: "-50px" }}
-                transition={{
-                    duration: 0.8,
-                    ease: [0.25, 0.1, 0.25, 1],
-                    delay: index * 0.15,
-                }}
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={handleMouseLeave}
-            >
-                {/* Image Container with 3D Effect */}
-                <motion.div
-                    className="relative aspect-[3/4] overflow-hidden bg-black/20"
-                    style={{
-                        rotateX,
-                        rotateY,
-                        transformStyle: "preserve-3d",
-                    }}
-                >
-                    <motion.div
-                        className="absolute inset-0"
-                        animate={{
-                            scale: isHovered ? 1.05 : 1,
-                        }}
-                        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-                    >
-                        <Image
-                            src={item.image}
-                            alt={item.alt}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            priority={index === 0}
-                        />
-                    </motion.div>
-
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-
-                    {/* Content Overlay */}
-                    <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 lg:p-8">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{
-                                opacity: isHovered ? 1 : 0.9,
-                                y: isHovered ? 0 : 10,
-                            }}
-                            transition={{ duration: 0.4 }}
-                        >
-                            <motion.h3
-                                className="text-[36px] sm:text-[48px] lg:text-[64px] font-[500] leading-[0.95] tracking-[-0.02em] mb-2"
-                                style={{ fontFamily: "Bodoni Moda, serif" }}
-                            >
-                                {item.title}
-                            </motion.h3>
-                            {item.subtitle && (
-                                <motion.p
-                                    className="text-white/80 text-sm sm:text-base uppercase tracking-widest mb-3"
-                                    animate={{
-                                        opacity: isHovered ? 1 : 0.7,
-                                    }}
-                                >
-                                    {item.subtitle}
-                                </motion.p>
-                            )}
-                            <motion.p
-                                className="text-white/70 text-sm sm:text-base leading-relaxed max-w-md"
-                                animate={{
-                                    opacity: isHovered ? 1 : 0,
-                                    height: isHovered ? "auto" : 0,
-                                }}
-                                transition={{ duration: 0.4 }}
-                            >
-                                {item.desc}
-                            </motion.p>
-                        </motion.div>
-                    </div>
-
-                    {/* Shine Effect */}
-                    <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                        animate={{
-                            x: isHovered ? ["-100%", "200%"] : "-100%",
-                        }}
-                        transition={{
-                            duration: 1.5,
-                            ease: "easeInOut",
-                            repeat: isHovered ? Infinity : 0,
-                            repeatDelay: 2,
-                        }}
-                        style={{
-                            transform: "skewX(-20deg)",
-                        }}
-                    />
-                </motion.div>
-
-                {/* Border Glow */}
-                <div className="absolute inset-0 border border-white/10 group-hover:border-white/30 transition-colors duration-500 pointer-events-none" />
-            </motion.div>
-        );
-    }
-
-    // Text-focused card for last two items
     return (
         <motion.div
-            className="group relative flex flex-col justify-center p-6 sm:p-8 lg:p-12 min-h-[300px] sm:min-h-[380px]"
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ margin: "-50px" }}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 xl:gap-20 items-center min-h-[500px] lg:min-h-[600px]"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{
                 duration: 0.8,
                 ease: [0.25, 0.1, 0.25, 1],
                 delay: index * 0.15,
             }}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={handleMouseLeave}
         >
-            {/* Background Image (Subtle) */}
-            <motion.div
-                className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-700"
-                style={{
-                    rotateX,
-                    rotateY,
-                    transformStyle: "preserve-3d",
-                }}
-            >
-                <Image
-                    src={item.image}
-                    alt={item.alt}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-black/60" />
-            </motion.div>
-
-            {/* Content */}
-            <div className="relative z-10">
-                <motion.div
-                    animate={{
-                        y: isHovered ? -10 : 0,
-                    }}
-                    transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+            {/* Text Content - Left Side */}
+            <div className="order-2 lg:order-1">
+                <motion.h3
+                    className="text-[36px] sm:text-[48px] lg:text-[64px] font-[500] leading-[0.95] tracking-[-0.02em] mb-4"
+                    style={{ fontFamily: "Bodoni Moda, serif" }}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ margin: "-100px" }}
+                    transition={{ duration: 0.6, delay: index * 0.15 + 0.1 }}
                 >
-                    <motion.h3
-                        className="text-[40px] sm:text-[56px] lg:text-[72px] font-[500] leading-[0.95] tracking-[-0.02em] mb-4"
-                        style={{ fontFamily: "Bodoni Moda, serif" }}
-                        animate={{
-                            scale: isHovered ? 1.02 : 1,
-                        }}
-                    >
-                        {item.title}
-                    </motion.h3>
-                    {item.subtitle && (
-                        <motion.p
-                            className="text-white/60 text-sm sm:text-base uppercase tracking-[0.2em] mb-6"
-                            animate={{
-                                opacity: isHovered ? 1 : 0.7,
-                            }}
-                        >
-                            {item.subtitle}
-                        </motion.p>
-                    )}
+                    {item.title}
+                </motion.h3>
+                {item.subtitle && (
                     <motion.p
-                        className="text-white/70 text-base sm:text-lg leading-relaxed max-w-lg"
-                        animate={{
-                            opacity: isHovered ? 1 : 0.8,
-                        }}
+                        className="text-white/80 text-sm sm:text-base uppercase tracking-widest mb-6"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ margin: "-100px" }}
+                        transition={{ duration: 0.6, delay: index * 0.15 + 0.2 }}
                     >
-                        {item.desc}
+                        {item.subtitle}
                     </motion.p>
-
-                    {/* Decorative Line */}
-                    <motion.div
-                        className="mt-8 h-px bg-white/20"
-                        animate={{
-                            scaleX: isHovered ? 1 : 0.5,
-                            opacity: isHovered ? 1 : 0.5,
-                        }}
-                        transition={{ duration: 0.6 }}
-                    />
-                </motion.div>
+                )}
+                <motion.p
+                    className="text-white/70 text-base sm:text-lg leading-relaxed max-w-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ margin: "-100px" }}
+                    transition={{ duration: 0.6, delay: index * 0.15 + 0.3 }}
+                >
+                    {item.desc}
+                </motion.p>
             </div>
 
-            {/* Border */}
-            <div className="absolute inset-0 border border-white/10 group-hover:border-white/20 transition-colors duration-500 pointer-events-none" />
+            {/* Image - Right Side with Sticky on Desktop */}
+            <div className="order-1 lg:order-2 lg:sticky lg:top-32 lg:self-start lg:h-[calc(100vh-8rem)] lg:flex lg:items-center">
+                <motion.div
+                    className="group relative overflow-hidden rounded-sm w-full max-w-[500px] mx-auto lg:mx-0"
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ margin: "-100px" }}
+                    transition={{
+                        duration: 0.8,
+                        ease: [0.25, 0.1, 0.25, 1],
+                        delay: index * 0.15 + 0.2,
+                    }}
+                >
+                    {/* Image Container */}
+                    <div className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] overflow-hidden bg-black/20 w-full">
+                        <motion.div
+                            className="absolute inset-0"
+                            animate={{
+                                scale: isHovered ? 1.12 : 1,
+                            }}
+                            transition={{
+                                duration: 0.6,
+                                ease: [0.25, 0.1, 0.25, 1],
+                            }}
+                        >
+                            <Image
+                                src={item.image}
+                                alt={item.alt}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 500px"
+                                priority={index === 0}
+                            />
+                        </motion.div>
+
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Border Glow on Hover */}
+                        <motion.div
+                            className="absolute inset-0 border border-white/0 group-hover:border-white/30 transition-colors duration-500 pointer-events-none"
+                            animate={{
+                                opacity: isHovered ? 1 : 0,
+                            }}
+                        />
+                    </div>
+                </motion.div>
+            </div>
         </motion.div>
     );
 }
