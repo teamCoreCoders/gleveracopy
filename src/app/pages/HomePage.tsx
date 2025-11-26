@@ -32,7 +32,8 @@ export default function HomePage() {
       />
 
       {/* ===== Hero Section ===== */}
-      <section className="relative z-10 bg-transparent">
+     <section className="relative z-0">
+
         <HeroSection />
       </section>
 
@@ -42,12 +43,12 @@ export default function HomePage() {
       </section>
 
       {/* ===== Vertical Carousel ===== */}
-      <section className="py-24 bg-transparent">
+      <section className="py-16 bg-transparent">
         <VerticalCarousel />
       </section>
 
       {/* ===== Three Feature Cards ===== */}
-      <section className="py-20 px-6 md:px-12 lg:px-24 border-t border-neutral-800 bg-transparent">
+      <section className="py-16 px-6 md:px-12 lg:px-24 border-t border-neutral-800 bg-transparent">
         <ThreeFeatureCards />
       </section>
 

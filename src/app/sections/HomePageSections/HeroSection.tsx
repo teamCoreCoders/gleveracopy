@@ -43,8 +43,9 @@ export default function Hero() {
                         alt="HeroSection"
                         fill
                         priority
+                        quality={100}
                         sizes="100vw"
-                        className="object-cover [transform:translateZ(0)]"
+                        className="object-cover object-top saturate-[1.1] contrast-[1.05] [transform:translateZ(0)]"
                     />
                 </div>
             </motion.div>
@@ -58,7 +59,7 @@ export default function Hero() {
             >
                 <div className="text-center">
                     <motion.h1
-                        className="mb-[400] fraunces-text text-white text-5xl sm:text-6xl md:text-7xl leading-[0.95] tracking-[0.04em]"
+                        className="mb-10 md:mb-12 fraunces-text text-white text-5xl sm:text-6xl md:text-7xl leading-[0.95] tracking-[0.04em]"
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ margin: "-100px" }}

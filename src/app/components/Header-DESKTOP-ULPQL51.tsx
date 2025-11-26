@@ -105,6 +105,9 @@ const FEATURED_ITEMS = [
     { id: 2, href: '/categories/feature-2', image: '/images/green-ring.png', label: 'Check that' },
 ] as const;
 
+const NAV_LINK_CLASS =
+    'relative inline-flex items-center px-[6px] py-1 text-[12px] tracking-[0.35em] uppercase text-white/70 transition-colors duration-300 hover:text-white';
+
 function CollectionMenu() {
     const [open, setOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -123,7 +126,7 @@ function CollectionMenu() {
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className="flex items-center gap-1 focus:outline-none"
+                className={`${NAV_LINK_CLASS} gap-2 focus:outline-none`}
                 aria-haspopup="true"
                 aria-expanded={open}
             >
@@ -132,47 +135,48 @@ function CollectionMenu() {
             </button>
 
             {open && (
-                <div className="absolute left-[350px] -translate-x-1/2 top-[50px] w-screen z-40 bg-black">
-
-                   <div className="mx-auto max-w-[1400px] dropdown-collection-panel shadow-xl ring-1 ring-white/10">
-
-                        <div className="flex items-start gap-8 px-10 py-1">
-                            <div className="shrink-0 pt-1 min-w-[120px]">
-                                <p className="text-lg tracking-wide text-black">Collection</p>
-                            </div>
-
-                            <aside className="shrink-0">
-                                <h4 className="text-sm tracking-wide text-black/70 mb-3">Categories</h4>
-                                <ul className="space-y-4">
+                <div className="absolute left-1/2 top-11 z-40 w-[720px] -translate-x-1/2">
+                    <div className="rounded-[32px] bg-[#0C0C0C] px-10 py-8 text-white shadow-[0_45px_120px_rgba(0,0,0,0.65)]">
+                        <div className="flex gap-10">
+                            <div className="shrink-0">
+                                <p className="text-xs uppercase tracking-[0.55em] text-white/60 mb-4">Categories</p>
+                                <ul className="space-y-3">
                                     {COLLECTION_CATEGORIES.map((c) => (
                                         <li key={c.name}>
                                             <Link
                                                 href={c.href}
                                                 onClick={() => setOpen(false)}
-                                                className="flex items-center gap-3 px-2 rounded hover:bg-black/5"
+                                                className="flex items-center gap-3 text-sm text-white/80 hover:text-white transition-colors"
                                             >
-                                                <img src={c.icon} alt="" className="h-8 w-8 object-contain" />
-                                                <span className="text-sm">{c.name}</span>
+                                                <img src={c.icon} alt="" className="h-9 w-9 object-contain" />
+                                                <span>{c.name}</span>
                                             </Link>
                                         </li>
                                     ))}
                                 </ul>
-                            </aside>
+                            </div>
 
-                            <div className="grow" />
-
-                            <div className="flex items-start gap-10">
+                            <div className="grow pl-8 flex flex-col gap-6">
                                 {FEATURED_ITEMS.map((item) => (
                                     <Link
                                         key={item.id}
                                         href={item.href}
                                         onClick={() => setOpen(false)}
-                                        className="block text-center"
+                                        className="group flex gap-4"
                                     >
-                                        <div className="bg-black aspect-[3/4] w-[155px] max-w-[28vw] overflow-hidden">
-                                            <img src={item.image} alt="" className="h-full w-full object-contain" />
+                                        <div className="relative aspect-[3/4] w-[140px] overflow-hidden rounded-2xl bg-white/5">
+                                            <img
+                                                src={item.image}
+                                                alt=""
+                                                className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                                            />
                                         </div>
-                                        <p className="mt-2 text-[11px] leading-none text-black/70">{item.label}</p>
+                                        <div className="flex flex-col justify-center">
+                                            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Featured</p>
+                                            <p className="mt-2 text-sm text-white/90 group-hover:text-white">
+                                                {item.label}
+                                            </p>
+                                        </div>
                                     </Link>
                                 ))}
                             </div>
@@ -429,41 +433,41 @@ export default function Header() {
 
                     {/* Navigation center (desktop only) */}
                     <nav className="hidden lg:flex justify-center">
-                        <ul className="flex  flex-wrap justify-center md:gap-5 text-[#F7F5EF] text-lg px-2 py-1">
+                        <ul className="flex items-center gap-6 text-[#F7F5EF]">
                             <li>
                                 <CollectionMenu />
                             </li>
-                            <li className="px-2">
-                                <Link href="/categories/bracelets" className="hover:underline">
+                            <li>
+                                <Link href="/categories/bracelets" className={NAV_LINK_CLASS}>
                                     Bracelets
                                 </Link>
                             </li>
-                            <li className="px-2">
-                                <Link href="/categories/necklaces" className="hover:underline">
+                            <li>
+                                <Link href="/categories/necklaces" className={NAV_LINK_CLASS}>
                                     Necklaces
                                 </Link>
                             </li>
-                            <li className="px-2">
-                                <Link href="/categories/earrings" className="hover:underline">
+                            <li>
+                                <Link href="/categories/earrings" className={NAV_LINK_CLASS}>
                                     Earrings
                                 </Link>
                             </li>
-                            <li className="px-2">
-                                <Link href="/categories/rings" className="hover:underline">
+                            <li>
+                                <Link href="/categories/rings" className={NAV_LINK_CLASS}>
                                     Rings
                                 </Link>
                             </li>
-                            <li className="px-2">
-                                <Link href="/categories/our-story" className="hover:underline">
+                            <li>
+                                <Link href="/categories/our-story" className={NAV_LINK_CLASS}>
                                     Our Story
                                 </Link>
                             </li>
-                            <li className="px-2">
-                                <Link href="/categories/contact" className="hover:underline">
+                            <li>
+                                <Link href="/categories/contact" className={NAV_LINK_CLASS}>
                                     Contact
                                 </Link>
                             </li>
-                            <li className="px-2">
+                            <li className="pl-2">
                                 <CurrencyMenu />
                             </li>
                         </ul>
